@@ -26,7 +26,7 @@ def getYoutubeSongs(spotifyPlaylistTracks):
   
   return youtubeSongs
 
-def syncSpotifyPlaylistsToYoutubeMusic():
+def syncSpotifyToYoutubeMusic():
   spotifyPlaylists = getSpotifyPlaylists()
 
   if spotifyPlaylists is None:
@@ -45,7 +45,7 @@ def syncSpotifyPlaylistsToYoutubeMusic():
     youtubeSongs = getYoutubeSongs(spotifyPlaylistTracks)
     print("Total song count found from Youtube: " + str(len(youtubeSongs)))
     
-    if len(youtubeSongs) > 0
+    if len(youtubeSongs) > 0:
       youtubePlayListId = createYoutubePlaylist("Spotify:"+ spotifyPlaylist["name"], "This playlist created from Spotify trakcs with spotify2youtube")
 
       if youtubePlayListId is not None:
@@ -55,6 +55,6 @@ def syncSpotifyPlaylistsToYoutubeMusic():
     time.sleep(5)
 
 def main():
-  syncSpotifyPlaylistsToYoutubeMusic()
+  syncSpotifyToYoutubeMusic()
 
 main()
