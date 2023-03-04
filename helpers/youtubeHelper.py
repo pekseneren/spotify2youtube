@@ -15,12 +15,13 @@ def findYoutubeSong(trackQuery):
     yt = YTMusic('helpers/headers_auth.json')
 
     search_results = yt.search(trackQuery)
-    foundTheTrack = False
 
     for result in search_results:
-      if hasattr(result, "videoId"):
+      try:
         videoId = result["videoId"]
         return videoId
+      except Exception as e:
+        continue
     
     print("Track not found in Youtube: " + trackQuery)
 
