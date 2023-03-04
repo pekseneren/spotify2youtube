@@ -1,5 +1,5 @@
 from helpers.spotifyHelper import getTracks, getPlaylists
-from helpers.youtubeHelper import createPlayList, findEquivalentVideosOnYoutube, addVideosToPlayList
+from helpers.youtubeHelper import createPlaylist, findEquivalentVideosOnYoutube, addVideosToPlaylist
 
 def convertSpotifyTrackToQuery(track):
   artistList = []
@@ -31,16 +31,16 @@ def getSpotifyTracksAsQueryList():
 
   return trackQueryList
 
-def createYoutubePlayListWithEquivalentVideos(equivalentTracks):
-  playListId = createPlayList("My Spotify Tracks", "PlayList for Synced Spotify Tracks with spotify2youtube.")
-  print("PlayList created:" + playListId)
-  addVideosToPlayList(playListId, equivalentTracks)
+def createYoutubePlaylistWithEquivalentVideos(equivalentTracks):
+  playListId = createPlaylist("My Spotify Tracks", "This playlist created for my Spotify Tracks with spotify2youtube.")
+  print("Playlist created: " + playListId)
+  addVideosToPlaylist(playListId, equivalentTracks)
 
 def main():
   trackQueryList = getSpotifyTracksAsQueryList()
 
   equivalentVideos = findEquivalentVideosOnYoutube(trackQueryList)
 
-  createYoutubePlayListWithEquivalentVideos(equivalentVideos)
+  createYoutubePlaylistWithEquivalentVideos(equivalentVideos)
 
 main()
