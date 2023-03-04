@@ -1,38 +1,44 @@
 from ytmusicapi import YTMusic
 
-def createPlaylist(name, description):
-  yt = YTMusic('helpers/headers_auth.json')
-  playlistId = yt.create_playlist(name, description)
+def createYoutubePlaylist(name, description):
+  try:
+    yt = YTMusic('helpers/headers_auth.json')
+    playlistId = yt.create_playlist(name, description)
+    return playlistId
+  except Exception as e:
+    print("Playlist creation failed for: " + name)
+    print("Error: " + str(e))
+    return None
 
-  return playlistId
+def findYoutubeSong(trackQuery):
+  try:
+    yt = YTMusic('helpers/headers_auth.json')
 
-def findEquivalentVideosOnYoutube(trackQueryList):
-  yt = YTMusic('helpers/headers_auth.json')
-  equivalentVideos = []
-
-  for trackQuery in trackQueryList:
     search_results = yt.search(trackQuery)
     foundTheTrack = False
 
     for result in search_results:
-      try:
+      if hasattr(result, "videoId"):
         videoId = result["videoId"]
-        equivalentVideos.append(videoId)
-        foundTheTrack = True
-        break
-      except Exception as songException:
-        continue
+        return videoId
     
-    if foundTheTrack == False:
-      print("Track not found in Youtube: " + trackQuery)
+    print("Track not found in Youtube: " + trackQuery)
 
-  return equivalentVideos
+    return None
+  except Exception as e:
+    print("Playlist creation failed for: " + name)
+    print("Error: " + str(e))
+    return None
 
-def addVideosToPlaylist(playlistId, videos):
-  yt = YTMusic('helpers/headers_auth.json')
-  response = yt.add_playlist_items(playlistId, videos, duplicates=True)
-  
-  if response["status"] == "STATUS_SUCCEEDED":
-    print("Added video count: " + str(len(videos)))
+def addVideosToYoutubePlaylist(playlistId, videos):
+  try:
+    yt = YTMusic('helpers/headers_auth.json')
+    response = yt.add_playlist_items(playlistId, videos, duplicates=True)
+    
+    if response["status"] == "STATUS_SUCCEEDED":
+      print("Added video count: " + str(len(videos)))
 
-  print("Status: " + response["status"])
+    print("Status: " + response["status"])
+  except Exception as e:
+    print("Adding songs to Youtube playlist failed for: " + playlistId)
+    print("Error: " + str(e))

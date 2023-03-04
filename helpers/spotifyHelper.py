@@ -9,20 +9,30 @@ user = spotifyApiConfig["user"]
 payload = ""
 headers = { "Authorization": "Bearer " + token }
 
-def getTracks(endpoint):
-  conn = http.client.HTTPSConnection("api.spotify.com")
-  conn.request("GET", endpoint, payload, headers)
-  tracksResponse = conn.getresponse()
-  tracks = json.loads(tracksResponse.read().decode("utf-8"))
-  conn.close()
+def getSpotifyTracks(endpoint):
+  try:
+    conn = http.client.HTTPSConnection("api.spotify.com")
+    conn.request("GET", endpoint, payload, headers)
+    tracksResponse = conn.getresponse()
+    tracks = json.loads(tracksResponse.read().decode("utf-8"))
+    conn.close()
 
-  return tracks["items"]
+    return tracks["items"]
+  except Exception as e:
+    print("Getting Spotify tracks failed.")
+    print("Error: " + str(e))
+    return None
 
-def getPlaylists():
-  conn = http.client.HTTPSConnection("api.spotify.com")
-  conn.request("GET", "/v1/users/" + user + "/playlists", payload, headers)
-  playlistsResponse = conn.getresponse()
-  playlists = json.loads(playlistsResponse.read().decode("utf-8"))
-  conn.close()
+def getSpotifyPlaylists():
+  try:
+    conn = http.client.HTTPSConnection("api.spotify.com")
+    conn.request("GET", "/v1/users/" + user + "/playlists", payload, headers)
+    playlistsResponse = conn.getresponse()
+    playlists = json.loads(playlistsResponse.read().decode("utf-8"))
+    conn.close()
 
-  return playlists["items"]
+    return playlists["items"]
+  except Exception as e:
+    print("Getting Spotify play lists failed.")
+    print("Error: " + str(e))
+    return None
