@@ -1,25 +1,5 @@
-import http.client
-import json
-
-token = "<TOKEN_HERE>"
-user = "<SPOTIFY_USER_HERE>"
-payload = ''
-headers = { 'Authorization': 'Bearer ' + token }
-conn = http.client.HTTPSConnection("api.spotify.com")
-
-def getTracks(endpoint):
-  conn.request("GET", endpoint, payload, headers)
-  tracksResponse = conn.getresponse()
-  tracks = json.loads(tracksResponse.read().decode('utf-8'))
-
-  return tracks["items"]
-
-def getPlaylists():
-  conn.request("GET", "/v1/users/" + user + "/playlists", payload, headers)
-  playlistsResponse = conn.getresponse()
-  playlists = json.loads(playlistsResponse.read().decode('utf-8'))
-
-  return playlists["items"]
+from helpers.spotifyHelper import getTracks, getPlaylists
+from helpers.youtubeHelper import createPlayList, findEquivalentVideosOnYoutube, addVideosToPlayList
 
 def convertSpotifyTrackToQuery(track):
   artistList = []
@@ -27,38 +7,40 @@ def convertSpotifyTrackToQuery(track):
   for artist in track["artists"]:
     artistList.append(artist["name"])
 
-  artistQuery = ' & '.join(artistList)
+  artistQuery = " & ".join(artistList)
 
-  return artistQuery + " " + track["name"]
+  trackQuery = artistQuery + " " + track["name"]
 
-def getSpotifyTracksBySearchableQuery():
+  return trackQuery
+
+def getSpotifyTracksAsQueryList():
   playlists = getPlaylists()
 
   print("Total playlist count: " + str(len(playlists)))
 
-  trackSearchQuery = []
+  trackQueryList = []
 
   for playlist in playlists:
-    print("Getting tracks of playlist: " + playlist["name"])
     tracksResponse = getTracks(playlist["tracks"]["href"])
 
     for trackResponse in tracksResponse:
       query = convertSpotifyTrackToQuery(trackResponse["track"])
-      trackSearchQuery.append(query)
+      trackQueryList.append(query)
 
-  print("Total found tracks: " + str(len(trackSearchQuery)))
+  print("Total found tracks: " + str(len(trackQueryList)))
 
-  return trackSearchQuery
+  return trackQueryList
+
+def createYoutubePlayListWithEquivalentVideos(equivalentTracks):
+  playListId = createPlayList("My Spotify Tracks", "PlayList for Synced Spotify Tracks with spotify2youtube.")
+  print("PlayList created:" + playListId)
+  addVideosToPlayList(playListId, equivalentTracks)
 
 def main():
-  print("start")
+  trackQueryList = getSpotifyTracksAsQueryList()
 
-  spotifyTracks = getSpotifyTracksBySearchableQuery()
+  equivalentVideos = findEquivalentVideosOnYoutube(trackQueryList)
 
-  print(spotifyTracks)
-
-  conn.close()
-
-  print("end")
+  createYoutubePlayListWithEquivalentVideos(equivalentVideos)
 
 main()
