@@ -1,5 +1,6 @@
 # spotify2youtube
-Sync your Spotify tracks to Youtube Music.
+If you don't want to snyc your Spotify tracks/playlist to Youtube Music manually then you can use this simple python app with a 5~ min of auth setup.
+Created songs for Youtube Music are relay on Youtubes search algorithm. Songs are not %100 matched.
 
 # Usage
 

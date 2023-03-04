@@ -13,34 +13,27 @@ def convertSpotifyTrackToQuery(track):
 
   return trackQuery
 
-def getSpotifyTracksAsQueryList():
+def createYoutubePlaylistWithEquivalentVideos(playlistName, equivalentVideos):
+  playListId = createPlaylist("Spotify:"+ playlistName, "This playlist created from Spotify trakcs with spotify2youtube")
+  print(playlistName + ": " + playListId)
+  addVideosToPlaylist(playListId, equivalentVideos)
+
+def main():
   playlists = getPlaylists()
 
   print("Total playlist count: " + str(len(playlists)))
 
-  trackQueryList = []
-
   for playlist in playlists:
+    tracksQueryList = []
     tracksResponse = getTracks(playlist["tracks"]["href"])
 
     for trackResponse in tracksResponse:
       query = convertSpotifyTrackToQuery(trackResponse["track"])
-      trackQueryList.append(query)
+      tracksQueryList.append(query)
 
-  print("Total found tracks: " + str(len(trackQueryList)))
+    equivalentVideos = findEquivalentVideosOnYoutube(tracksQueryList)
 
-  return trackQueryList
+    createYoutubePlaylistWithEquivalentVideos(playlist["name"], equivalentVideos)
 
-def createYoutubePlaylistWithEquivalentVideos(equivalentTracks):
-  playListId = createPlaylist("My Spotify Tracks", "This playlist created for my Spotify Tracks with spotify2youtube.")
-  print("Playlist created: " + playListId)
-  addVideosToPlaylist(playListId, equivalentTracks)
-
-def main():
-  trackQueryList = getSpotifyTracksAsQueryList()
-
-  equivalentVideos = findEquivalentVideosOnYoutube(trackQueryList)
-
-  createYoutubePlaylistWithEquivalentVideos(equivalentVideos)
 
 main()
