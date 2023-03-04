@@ -27,7 +27,7 @@ def findYoutubeSong(trackQuery):
 
     return None
   except Exception as e:
-    print("Playlist creation failed for: " + name)
+    print("Song search failed for: " + trackQuery)
     print("Error: " + str(e))
     return None
 
