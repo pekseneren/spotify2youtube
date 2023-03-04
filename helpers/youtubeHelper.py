@@ -16,7 +16,7 @@ def findEquivalentVideosOnYoutube(trackQueryList):
 
     for result in search_results:
       try:
-        videoId = search_results[0]["videoId"]
+        videoId = result["videoId"]
         equivalentVideos.append(videoId)
         foundTheTrack = True
         break
@@ -33,6 +33,6 @@ def addVideosToPlaylist(playlistId, videos):
   response = yt.add_playlist_items(playlistId, videos, duplicates=True)
   
   if response["status"] == "STATUS_SUCCEEDED":
-    print("Added video count: " + str(len(equivalentTracks)))
+    print("Added video count: " + str(len(videos)))
 
   print("Status: " + response["status"])
