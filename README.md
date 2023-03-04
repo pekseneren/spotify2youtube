@@ -1,18 +1,18 @@
 # spotify2youtube
-Sync spotify playlists with youtube music.
+Sync your Spotify tracks to Youtube Music.
 
 # Usage
 
 1. Get your Spotify Access Token from [here](https://developer.spotify.com/documentation/web-playback-sdk/quick-start/).
 1. If you don't know your Spotify `username` find out from [here](https://developer.spotify.com/console/get-current-user/) with your Acces Token.
-1. Put your `token` and Spotify `username` int `spotify_api_config_example.json`
+1. Put your `token` and Spotify `username` in to `spotify_api_config_example.json`
 1. Change `spotify_api_config_example.json` file name to `spotify_api_config.json`
 1. Folllow the steps from [this site](https://ytmusicapi.readthedocs.io/en/latest/setup.html) for setting up your Youtube auth headers 
-1. Check your `headers_auth.json` properties with `h`eaders_auth_example.json`
-1. Make sure your auth .json files are under helpers folder and remove the '_example' suffix from file name.
+1. Check your `headers_auth.json` properties with `headers_auth_example.json`
+1. Make sure your auth .json files are under `helpers` folder and remove the '_example' suffix from file names.
 1. Run with `python main.py`
 1. Not found tracks will be printed to console for manual search.
 
 # YTMusic
 
-Check out the YTMusic usage from [here](https://github.com/sigma67/ytmusicapi)
+Check out the YTMusic api from [here](https://github.com/sigma67/ytmusicapi)
