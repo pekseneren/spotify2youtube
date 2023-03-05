@@ -1,38 +1,33 @@
-import http.client
 import json
+import requests
 
-spotifyApiConfigFile = open('helpers/spotify_api_config.json')
-spotifyApiConfig = json.load(spotifyApiConfigFile)
+with open('helpers/spotify_api_config.json') as f:
+    spotifyApiConfig = json.load(f)
 
 token = spotifyApiConfig["token"]
 user = spotifyApiConfig["user"]
-payload = ""
-headers = { "Authorization": "Bearer " + token }
+headers = { "Authorization": f"Bearer {token}" }
 
-def getSpotifyTracks(endpoint):
+def get_spotify_tracks(endpoint):
   try:
-    conn = http.client.HTTPSConnection("api.spotify.com")
-    conn.request("GET", endpoint, payload, headers)
-    tracksResponse = conn.getresponse()
-    tracks = json.loads(tracksResponse.read().decode("utf-8"))
-    conn.close()
+      response = requests.get(endpoint, headers=headers)
+      response.raise_for_status()
+      return response.json()["items"]
+  except requests.exceptions.RequestException as e:
+      print(f"Getting Spotify tracks failed: {e}")
+      return None
 
-    return tracks["items"]
-  except Exception as e:
-    print("Getting Spotify tracks failed.")
-    print("Error: " + str(e))
-    return None
-
-def getSpotifyPlaylists():
-  try:
-    conn = http.client.HTTPSConnection("api.spotify.com")
-    conn.request("GET", "/v1/users/" + user + "/playlists", payload, headers)
-    playlistsResponse = conn.getresponse()
-    playlists = json.loads(playlistsResponse.read().decode("utf-8"))
-    conn.close()
-
-    return playlists["items"]
-  except Exception as e:
-    print("Getting Spotify play lists failed.")
-    print("Error: " + str(e))
-    return None
+def get_spotify_playlists():
+    playlists = []
+    next_url = f"https://api.spotify.com/v1/users/{user}/playlists"
+    while next_url:
+        try:
+            response = requests.get(next_url, headers=headers)
+            response.raise_for_status()
+            data = response.json()
+            playlists.extend(data["items"])
+            next_url = data["next"]
+        except requests.exceptions.RequestException as e:
+            print(f"Getting Spotify playlists failed: {e}")
+            return None
+    return playlists

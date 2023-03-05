@@ -1,60 +1,55 @@
 import time
-from helpers.spotifyHelper import getSpotifyTracks, getSpotifyPlaylists
-from helpers.youtubeHelper import createYoutubePlaylist, findYoutubeSong, addVideosToYoutubePlaylist
+from helpers.spotifyHelper import get_spotify_tracks, get_spotify_playlists
+from helpers.youtubeHelper import create_youtube_playlist, add_videos_to_youtube_playlist, find_youtube_song
 
-def getTrackQuery(track):
-  artistList = []
+def get_track_query(track):
+    artist_query = " & ".join([artist["name"] for artist in track["artists"]])
+    return f"{artist_query} {track['name']}"
 
-  for artist in track["artists"]:
-    artistList.append(artist["name"])
+def get_youtube_songs(spotify_playlist_tracks):
+  youtube_songs = []
 
-  artistQuery = " & ".join(artistList)
+  for spotify_track in spotify_playlist_tracks:
+    track_query = get_track_query(spotify_track["track"])
+    song_id = find_youtube_song(track_query)
 
-  trackQuery = artistQuery + " " + track["name"]
-
-  return trackQuery
-
-def getYoutubeSongs(spotifyPlaylistTracks):
-  youtubeSongs = []
-
-  for spotifyTrack in spotifyPlaylistTracks:
-    trackQuery = getTrackQuery(spotifyTrack["track"])
-    songId = findYoutubeSong(trackQuery)
-
-    if songId is not None:
-      youtubeSongs.append(songId)
+    if song_id is not None:
+      youtube_songs.append(song_id)
   
-  return youtubeSongs
+  return youtube_songs
 
-def syncSpotifyToYoutubeMusic():
-  spotifyPlaylists = getSpotifyPlaylists()
+def sync_spotify_to_youtube_music():
+  spotify_playlists = get_spotify_playlists()
 
-  if spotifyPlaylists is None:
+  if not spotify_playlists:
     return
 
-  print("Total Spotify playlist count: " + str(len(spotifyPlaylists)))
+  print(f"Total Spotify playlist count: {len(spotify_playlists)}")
 
-  for spotifyPlaylist in spotifyPlaylists:
-    spotifyPlaylistTracks = getSpotifyTracks(spotifyPlaylist["tracks"]["href"])
+  for playlist in spotify_playlists:
+    tracks = get_spotify_tracks(playlist['tracks']['href'])
 
-    if spotifyPlaylistTracks is None:
+    if not tracks:
       continue
 
-    print("Total track count for " + spotifyPlaylist["name"] + ": " + str(len(spotifyPlaylistTracks)))
-    
-    youtubeSongs = getYoutubeSongs(spotifyPlaylistTracks)
-    print("Total song count found from Youtube: " + str(len(youtubeSongs)))
-    
-    if len(youtubeSongs) > 0:
-      youtubePlayListId = createYoutubePlaylist("Spotify:"+ spotifyPlaylist["name"], "This playlist created from Spotify trakcs with spotify2youtube")
+    print(f"Total track count for {playlist['name']}: {len(tracks)}")
 
-      if youtubePlayListId is not None:
-        print(spotifyPlaylist["name"] + " Playlist id: " + youtubePlayListId)
-        addVideosToYoutubePlaylist(youtubePlayListId, youtubeSongs)
-    
+    youtube_songs = get_youtube_songs(tracks)
+    print(f"Total song count found from YouTube: {len(youtube_songs)}")
+
+    if youtube_songs:
+      playlist_title = f"Spotify:{playlist['name']}"
+      playlist_description = "This playlist was created from Spotify tracks with spotify2youtube."
+      youtube_playlist_id = create_youtube_playlist(playlist_title, playlist_description)
+
+      if youtube_playlist_id:
+        print(f"{playlist['name']} playlist id: {youtube_playlist_id}")
+        add_videos_to_youtube_playlist(youtube_playlist_id, youtube_songs)
+
     time.sleep(5)
 
 def main():
-  syncSpotifyToYoutubeMusic()
+  sync_spotify_to_youtube_music()
 
-main()
+if __name__ == "__main__":
+  main()

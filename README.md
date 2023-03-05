@@ -4,7 +4,7 @@ Created songs for Youtube Music are relay on Youtubes search algorithm. Songs ar
 
 # Usage
 
-1. Get your Spotify Access Token from [here](https://developer.spotify.com/documentation/web-playback-sdk/quick-start/).
+1. Get your Spotify Access Token from [here](https://developer.spotify.com/console/get-current-user/) or [here](https://developer.spotify.com/documentation/web-playback-sdk/quick-start/). On [web console](https://developer.spotify.com/console/get-current-user/) when you click `GET TOKEN` button you can also tick `user-read-private` option if you want your private playlists to be synced as well.
 1. If you don't know your Spotify `username` find out from [here](https://developer.spotify.com/console/get-current-user/) with your Acces Token.
 1. Put your `token` and Spotify `username` in to `spotify_api_config_example.json`
 1. Change `spotify_api_config_example.json` file name to `spotify_api_config.json`
