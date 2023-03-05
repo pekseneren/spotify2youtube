@@ -11,7 +11,7 @@ Created songs for Youtube Music are relay on Youtubes search algorithm. Songs ar
 1. Folllow the steps from [this site](https://ytmusicapi.readthedocs.io/en/latest/setup.html) for setting up your Youtube auth headers 
 1. Check your `headers_auth.json` properties with `headers_auth_example.json`
 1. Make sure your auth .json files are under `helpers` folder and remove the '_example' suffix from file names.
-1. Run with `python main.py`
+1. Run with `python spotify2youtube.py`
 1. Not found tracks will be printed to console for manual search.
 
 # YTMusic

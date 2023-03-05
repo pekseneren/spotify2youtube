@@ -1,6 +1,6 @@
 import time
-from helpers.spotifyHelper import get_spotify_playlist_tracks, get_spotify_playlists
-from helpers.youtubeHelper import create_youtube_playlist, add_videos_to_youtube_playlist, find_youtube_song
+from helpers.spotify_helper import get_spotify_playlist_tracks, get_spotify_playlists
+from helpers.youtube_helper import create_youtube_playlist, add_videos_to_youtube_playlist, find_youtube_song
 
 def get_track_query(track):
     artist_query = " & ".join([artist["name"] for artist in track["artists"]])
