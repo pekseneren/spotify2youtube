@@ -1,5 +1,5 @@
 import time
-from helpers.spotifyHelper import get_spotify_tracks, get_spotify_playlists
+from helpers.spotifyHelper import get_spotify_playlist_tracks, get_spotify_playlists
 from helpers.youtubeHelper import create_youtube_playlist, add_videos_to_youtube_playlist, find_youtube_song
 
 def get_track_query(track):
@@ -27,12 +27,12 @@ def sync_spotify_to_youtube_music():
   print(f"Total Spotify playlist count: {len(spotify_playlists)}")
 
   for playlist in spotify_playlists:
-    tracks = get_spotify_tracks(playlist['tracks']['href'])
+    tracks = get_spotify_playlist_tracks(playlist['tracks']['href'])
 
     if not tracks:
       continue
 
-    print(f"Total track count for {playlist['name']}: {len(tracks)}")
+    print(f"Total track count for '{playlist['name']}': {len(tracks)}")
 
     youtube_songs = get_youtube_songs(tracks)
     print(f"Total song count found from YouTube: {len(youtube_songs)}")
@@ -43,7 +43,7 @@ def sync_spotify_to_youtube_music():
       youtube_playlist_id = create_youtube_playlist(playlist_title, playlist_description)
 
       if youtube_playlist_id:
-        print(f"{playlist['name']} playlist id: {youtube_playlist_id}")
+        print(f"'{playlist_title}' playlist id: {youtube_playlist_id}")
         add_videos_to_youtube_playlist(youtube_playlist_id, youtube_songs)
 
     time.sleep(5)

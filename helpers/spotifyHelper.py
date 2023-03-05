@@ -8,7 +8,7 @@ token = spotifyApiConfig["token"]
 user = spotifyApiConfig["user"]
 headers = { "Authorization": f"Bearer {token}" }
 
-def get_spotify_tracks(endpoint):
+def get_spotify_playlist_tracks(endpoint):
   try:
       response = requests.get(endpoint, headers=headers)
       response.raise_for_status()
